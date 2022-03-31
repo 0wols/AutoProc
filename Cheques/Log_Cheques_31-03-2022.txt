@@ -1,0 +1,4 @@
+02:30:01.134: Programa iniciado. Presione Ctrl-C para abortar.
+07:17:52.696: Programa Finalizado por KeyboardInterrupt
+07:18:03.389: Programa iniciado. Presione Ctrl-C para abortar.
+07:18:08.895: Se hizo click en el Modulo: ACHEGEO
