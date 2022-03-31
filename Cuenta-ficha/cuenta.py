@@ -6,7 +6,8 @@ import re
 import pandas as pd
 from datetime import date
 from pywinauto.application import Application
-
+from win32api import GetKeyState 
+from win32con import VK_CAPITAL
 
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 6)
 ag.PAUSE = 2
@@ -107,10 +108,16 @@ def funcion1(coords, nom_modulo, cta_inicial, cta_final, fecha_inicial, fecha_fi
 
     # Usuario
     ag.click(user_box[0] - 160, user_box[1] - 4)  
-    ag.write('CCORR')
+    if caps1 == 0:
+        ag.write('CCORR')
+    else:
+        ag.write('ccorr')
     # Password
     ag.click(user_box[0] - 160, user_box[1] + 30)
-    ag.write('CCORR')
+    if caps2 == 0:
+        ag.write('CCORR')
+    else:
+        ag.write('ccorr')
     ag.click(user_box[0] + 1, user_box[1] - 13)
     flex_cuentas = ag.locateCenterOnScreen(imPath('Flex_Cuentas.png'))
     ag.click(flex_cuentas)
