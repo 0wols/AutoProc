@@ -1,3 +1,5 @@
+#!"C:\Cmder\SII\Scripts\python.exe"
+
 import pyautogui as ag
 import time, os, logging
 import ctypes
@@ -8,7 +10,8 @@ from datetime import date, timedelta
 from pyautogui import FailSafeException, ImageNotFoundException
 from pywinauto.application import Application
 from tenacity import retry, retry_if_result, retry_if_exception_type, stop_after_delay
-
+from win32api import GetKeyState 
+from win32con import VK_CAPITAL 
 
 
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 6)
@@ -157,10 +160,18 @@ def buscarVentana(coords, cta_final, fecha_flex, fecha, nom_modulo):
 
     # Usuario
     ag.click(user_box[0] - 160, user_box[1] - 4)  
-    ag.write('CCORR')
+    caps1 = GetKeyState(VK_CAPITAL)
+    if caps1 == 0:
+        ag.write('CCORR')
+    else:
+        ag.write('ccorr')
     # Password
     ag.click(user_box[0] - 160, user_box[1] + 30)
-    ag.write('CCORR')
+    caps2 = GetKeyState(VK_CAPITAL)
+    if caps2 == 0:
+        ag.write('CCORR')
+    else:
+        ag.write('ccorr')
     ag.click(user_box[0] + 1, user_box[1] - 13)
     
     while True:
