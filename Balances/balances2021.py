@@ -1,6 +1,7 @@
 #!"C:\Cmder\SII\Scripts\python.exe"
 
-import time, os, logging
+import time, os, logging, glob
+import shutil
 import ctypes
 import subprocess
 import re    
@@ -119,18 +120,15 @@ def timeis(func):
 @timeis
 def main():
     logging.info('Programa iniciado. Presione Ctrl-C para abortar.')
-    # preparacion()
     for i in x:
         logging.info('Comienza Loop Empresa: %s' % i[0])
         mainLoop(i[1], "1", "9999999", i[0])
     consolidar()
-    # conectarVentana()
 
 
 
 def preparacion():
     logging.info('Comienza Preparación')
-    # ag.click(786, 94, clicks=2)
     ag.hotkey("winleft", "r")
     ag.write(r"C:\Documents and Settings\dental02\Escritorio\Contabilidad")
     ag.press('enter')
@@ -141,15 +139,12 @@ def preparacion():
             print(user_box)
             break
     ag.click(user_box[0], user_box[1] + 15)
-    # ag.click(454, 231)
-    # ag.click(1160, 96, clicks=2)
     ag.hotkey("winleft", "r")
     ag.write(r"V:\\")
     ag.press('enter')
     ag.write("Asecm.Finan6", interval=.25)
     time.sleep(3)
     ag.click(671, 609)
-    # ag.press('enter')
     while True:
         EQUIS = ag.locateOnScreen(imPath('Boton_Equis.png'))
         if EQUIS is not None:
@@ -209,26 +204,8 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     # b = ag.screenshot('Barra_Excel2.png', region=(0, 1040, 630, 40))
     while True:
         a = conectarVentana()
-        # excel1 = ag.locateOnScreen(imPath('Barra_Excel2.png'))
-        # flex_tomado = ag.locateOnScreen(imPath('Flex_ocupado.png'))
-        # excel2 = ag.locateCenterOnScreen(imPath('Excel2.png'))
-        # error_consultas = ag.locateCenterOnScreen(imPath('Error_consultas.png'))
         if a is not None:
-            # ag.moveTo(588, 1062, button='left', duration=.25)
-            # time.sleep(1)
-            # ag.moveTo(588, 965)
-            # ag.click(588, 965)
-            # ag.hotkey("winleft", "up")
             break
-        # if flex_tomado is not None:
-        #     logging.info(
-        #         "Modulo {} tomado por otro usuario".format(nom_modulo))
-        #     ag.click(818, 529)
-        #     ag.click(449, 133)
-        #     ag.click(1271, 7)
-        #     ag.click(37, 34)
-        #     ag.click(37, 117)
-        #     break
         
     excel = Application().connect(process=int(a))
     excel[u"excflx.txt - Excel"].maximize()        
@@ -247,20 +224,13 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     ag.click(763, 42)
     ag.write(r"W:\Balances")
     ag.press("enter")
-    # time.sleep(2)
     ag.click(770, 904)
     ag.write('Balance_2021_' + nom_modulo + '_' + str(fecha) + '.xlsx')
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
     ag.click(1748, 1008)
-    # time.sleep(2)
-    # time.sleep(2)
     ag.click(1904, 14)
-    # ag.press('enter')
-
-    # time.sleep(2)
-
     ag.click(458, 140)
     ag.click(40, 39)
     ag.click(43, 125)
@@ -272,13 +242,6 @@ def conectarVentana():
     df = pd.DataFrame(df)
     proc = df.loc[df["image"] == "EXCEL.EXE"]["pid"].values[0]
     return proc
-
-
-
-
-
-    # print(df.loc[df["image"] == "EXCEL.EXE"]["pid"].values[0])
-
 
 
 def consolidar():
@@ -294,7 +257,6 @@ def consolidar():
     while True:
         botonSi = ag.locateCenterOnScreen(imPath('Boton_si.png'))
         if botonSi is not None:
-            # logging.info("Venta, coords: {}".format(botonSi))
             break
     ag.click(botonSi[0] - 123, botonSi[1] + 64)
     ag.click(1902, 12)
@@ -302,17 +264,13 @@ def consolidar():
     ag.moveTo(431, 171)
     ag.dragTo(431, 127, 1, button='left')
     ag.click(989, 548)
-    ag.click(391, 39)
-    ag.moveTo(441, 930)
-    ag.dragTo(658, 152, 2, button='left')
-    ag.hotkey("ctrl","x")
-    ag.click(460, 128)
-    ag.press('enter')
-    ag.click(464, 149)
-    ag.press('enter')
-    ag.click(749, 937, button='right')
-    ag.click(808, 817)
-    ag.click(1892, 8)
+    ag.click(1893, 10)
+    source = 'W:\\Balances'
+    dest = 'W:\\Balances\\CONSOLIDADO\\Balances_historicos' 
+    os.chdir(source)
+    for f in glob.glob("*.xlsx"):
+        shutil.move(f, dest)
+
 
 
 if __name__ == '__main__':
