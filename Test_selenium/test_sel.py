@@ -40,7 +40,7 @@ nombre_archivo = 'Registro Compras Resumen-' + str(dia) +'.xlsm'
 asunto = 'Registros Compras ' + str(dia)
 
 
-logging.basicConfig(filename='Log_SII_' + fecha_actual + '.txt',
+logging.basicConfig(filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Test_selenium\Log_SII_" + fecha_actual + '.txt',
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
@@ -125,18 +125,18 @@ def timing(f):
 
 @timing
 def main():
-    # if dia_formateado < 10:
-    #     loop1()
-    # else:
-    #     loop2()
+    if dia_formateado < 10:
+        loop1()
+    else:
+        loop2()
     driver.close()
-    # logging.info('Fin descargas, se cambian de formato los archivos.')
-    # generar_libro()
-    # logging.info('Fin conversion. Se mueven archivos xlsx')
-    # mover_xlsx()
-    # logging.info('Fin movimiento archivos. Se ejecuta Macro')
-    # correr_macro()
-    # logging.info('Fin Macro. Se envia Correo')
+    logging.info('Fin descargas, se cambian de formato los archivos.')
+    generar_libro()
+    logging.info('Fin conversion. Se mueven archivos xlsx')
+    mover_xlsx()
+    logging.info('Fin movimiento archivos. Se ejecuta Macro')
+    correr_macro()
+    logging.info('Fin Macro. Se envia Correo')
     enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
     logging.info('Programa Finalizado')
 

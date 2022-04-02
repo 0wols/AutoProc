@@ -15,7 +15,7 @@ ag.PAUSE = 2
 fecha = date.today().strftime("%d-%m-%Y")
 
 logging.basicConfig(
-    filename='Log_CuentaFicha_' + str(fecha) + '.txt',
+    filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Cuentas-ficha\Log_CuentaFicha_" + str(fecha) + '.txt',
     level=logging.INFO,
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')

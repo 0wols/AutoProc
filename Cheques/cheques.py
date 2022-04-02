@@ -21,7 +21,7 @@ hoy = date.today()
 hoy_formato_dia = date.today().strftime("%a")
 
 logging.basicConfig(
-    filename='Log_Cheques_' + date.today().strftime("%d-%m-%Y") + '.txt',
+    filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Cheques\Log_Cheques_" + date.today().strftime("%d-%m-%Y") + '.txt',
     level=logging.INFO,
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')
