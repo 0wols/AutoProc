@@ -29,6 +29,9 @@ logging.basicConfig(
 if hoy_formato_dia == 'Mon':
     fechaFlex = hoy - timedelta(days=3)
     fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+elif hoy_formato_dia == 'Sun':
+    fechaFlex = hoy - timedelta(days=2)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
 else:
     fechaFlex = hoy - timedelta(days=1)
     fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
