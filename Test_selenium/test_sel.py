@@ -35,8 +35,8 @@ fecha_actual = datetime.today().strftime('%Y-%m-%d')
 dia = datetime.now().strftime('%d-%m-%Y')
 dia_formateado = int(dia[:2])
 
-direccion_para = "'fernando.allendes@ecm.cl';'jaime.arancibia@ecm.cl';'cristian.coronel@ecm.cl'"
-direccion_cc = "'alberto.allendes@ecm.cl';'maximiano.coronel@ecm.cl';'tomas.yanez@ecm.cl'"
+direccion_para = "fernando.allendes@ecm.cl;jaime.arancibia@ecm.cl;cristian.coronel@ecm.cl"
+direccion_cc = "alberto.allendes@ecm.cl;maximiano.coronel@ecm.cl;tomas.yanez@ecm.cl;pablo.coronel@valsegur.cl"
 ruta = r'W:\Test_selenium\Historico'
 nombre_archivo = 'Registro Compras Resumen-' + str(dia) +'.xlsm'
 asunto = 'Registros Compras ' + str(dia)
