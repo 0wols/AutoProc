@@ -110,7 +110,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'Estimados:\n\nSe adjunta registro de compras del holding para el mes ' + meses[currentMonth] + ' y los nuevos registros al: ' + fecha_actual +'\n\n'
+texto = 'Estimados:\n\nSe adjunta registro de compras para el holding actualizado al: ' + fecha_actual +'\n\n'
 
 
 def timing(f):
