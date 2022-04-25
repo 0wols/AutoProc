@@ -1,3 +1,5 @@
+#!"C:\Cmder\SII\Scripts\python.exe"
+
 import pyautogui as ag
 import time, os, logging
 import ctypes
@@ -108,12 +110,14 @@ def funcion1(coords, nom_modulo, cta_inicial, cta_final, fecha_inicial, fecha_fi
 
     # Usuario
     ag.click(user_box[0] - 160, user_box[1] - 4)  
+    caps1 = GetKeyState(VK_CAPITAL)
     if caps1 == 0:
         ag.write('CCORR')
     else:
         ag.write('ccorr')
     # Password
     ag.click(user_box[0] - 160, user_box[1] + 30)
+    caps2 = GetKeyState(VK_CAPITAL)
     if caps2 == 0:
         ag.write('CCORR')
     else:
@@ -148,25 +152,17 @@ def funcion1(coords, nom_modulo, cta_inicial, cta_final, fecha_inicial, fecha_fi
     time.sleep(10)
 
     # b = ag.screenshot('Barra_Excel_Cuenta.png', region=(2, 998, 914, 24))
-    # a = ag.locateCenterOnScreen(imPath('Barra_Excel_Error.png'))
-    if a is not None:
-        logging.info("Se encontro Barra de Error")
-        ag.click(1081, 604)
-        time.sleep(1)
-        proc = conectarVentana()
-        excel = Application().connect(process=int(proc))
-        excel[u"excflx.txt - Excel"].maximize()
-        sinDatosEnConsulta()
-    else:
-        time.sleep(15)
-        logging.info("No se encontro Barra de Error")
-        proc = conectarVentana()
-        excel = Application().connect(process=int(proc))
-        excel[u"excflx.txt - Excel"].maximize()  
-        # ag.moveTo(512, 1062, duration=2)
-        # ag.moveTo(525, 961, duration=2)
-        # ag.click(525, 961)
-        ventanaEncontrada(nom_modulo, fecha)
+    while True:
+        a = ag.locateCenterOnScreen(imPath('Barra_Completado.png'))
+        if a is not None:
+            proc = conectarVentana()
+            excel = Application().connect(process=int(proc))
+            excel[u"excflx.txt - Excel"].maximize()  
+            # ag.moveTo(512, 1062, duration=2)
+            # ag.moveTo(525, 961, duration=2)
+            # ag.click(525, 961)
+            ventanaEncontrada(nom_modulo, fecha)
+            break
 
 
 def ventanaEncontrada(nom_modulo, fecha):
@@ -182,13 +178,17 @@ def ventanaEncontrada(nom_modulo, fecha):
     ag.press("enter")
     # time.sleep(2)
     ag.click(770, 904)
-    ag.write('Cuenta-ficha_' + nom_modulo + '_' + str(fecha) + '.xlsx')
+    caps3 = GetKeyState(VK_CAPITAL)
+    if caps3 == 0:
+        ag.write('Cuenta-ficha_' + nom_modulo + '_' + str(fecha) + '.xlsx')
+    else:
+        ag.write('cUENTA-FICHA_' + nom_modulo.lower() + '_' + str(fecha) + '.XLSX') 
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
     ag.click(1748, 1008)
     # time.sleep(2)
-    # time.sleep(2)
+    time.sleep(10)
     ag.click(1904, 14)
     # ag.press('enter')
 
