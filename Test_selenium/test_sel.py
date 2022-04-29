@@ -28,6 +28,8 @@ from datetime import datetime
 from functools import wraps
 from time import time, sleep
 from tenacity import retry, retry_if_result, retry_if_exception_type
+from win32api import GetKeyState 
+from win32con import VK_CAPITAL
 
 
 ag.PAUSE = 2
@@ -128,20 +130,20 @@ def timing(f):
 
 @timing
 def main():
-    if dia_formateado < 10:
-        loop1()
-    else:
-        loop2()
+    # if dia_formateado < 10:
+    #     loop1()
+    # else:
+    #     loop2()
     driver.close()
-    logging.info('Fin descargas, se cambian de formato los archivos.')
-    generar_libro()
-    logging.info('Fin conversion. Se mueven archivos xlsx')
-    mover_xlsx()
-    logging.info('Fin movimiento archivos. Se ejecuta Macro')
+    # logging.info('Fin descargas, se cambian de formato los archivos.')
+    # generar_libro()
+    # logging.info('Fin conversion. Se mueven archivos xlsx')
+    # mover_xlsx()
+    # logging.info('Fin movimiento archivos. Se ejecuta Macro')
     correr_macro()
-    logging.info('Fin Macro. Se envia Correo')
-    enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
-    logging.info('Programa Finalizado')
+    # logging.info('Fin Macro. Se envia Correo')
+    # enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
+    # logging.info('Programa Finalizado')
 
 
 def loop1():
@@ -367,7 +369,11 @@ def mover_xlsx():
 def correr_macro():
     """ Ejecutar archivo xlsm con la macro  """
     ag.hotkey("winleft", "r")
-    ag.write(r"W:\Test_selenium\Registro Compras.xlsm")
+    caps1 = GetKeyState(VK_CAPITAL)
+    if caps1 == 0:
+        ag.write(r"W:\Test_selenium\Registro Compras.xlsm")
+    else:
+        ag.write(r"w:\tEST_SELENIUM\rEGISTRO cOMPRAS.XLSM")
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
