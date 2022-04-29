@@ -130,20 +130,20 @@ def timing(f):
 
 @timing
 def main():
-    # if dia_formateado < 10:
-    #     loop1()
-    # else:
-    #     loop2()
+    if dia_formateado < 10:
+        loop1()
+    else:
+        loop2()
     driver.close()
-    # logging.info('Fin descargas, se cambian de formato los archivos.')
-    # generar_libro()
-    # logging.info('Fin conversion. Se mueven archivos xlsx')
-    # mover_xlsx()
-    # logging.info('Fin movimiento archivos. Se ejecuta Macro')
+    logging.info('Fin descargas, se cambian de formato los archivos.')
+    generar_libro()
+    logging.info('Fin conversion. Se mueven archivos xlsx')
+    mover_xlsx()
+    logging.info('Fin movimiento archivos. Se ejecuta Macro')
     correr_macro()
-    # logging.info('Fin Macro. Se envia Correo')
-    # enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
-    # logging.info('Programa Finalizado')
+    logging.info('Fin Macro. Se envia Correo')
+    enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
+    logging.info('Programa Finalizado')
 
 
 def loop1():
