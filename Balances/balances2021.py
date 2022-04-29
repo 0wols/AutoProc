@@ -225,7 +225,11 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     ag.write(r"W:\Balances")
     ag.press("enter")
     ag.click(770, 904)
-    ag.write('Balance_2021_' + nom_modulo + '_' + str(fecha) + '.xlsx')
+    caps3 = GetKeyState(VK_CAPITAL)
+    if caps3 == 0:
+        ag.write('Balance_2021_' + nom_modulo + '_' + str(fecha) + '.xlsx')
+    else:
+        ag.write('bALANCE_2021_' + nom_modulo.lower() + '_' + str(fecha) + '.xlsx') 
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
