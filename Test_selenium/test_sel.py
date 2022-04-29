@@ -27,6 +27,8 @@ from datetime import datetime
 from functools import wraps
 from time import time, sleep
 from tenacity import retry, retry_if_result, retry_if_exception_type
+from win32api import GetKeyState 
+from win32con import VK_CAPITAL
 
 
 ag.PAUSE = 2
@@ -363,7 +365,11 @@ def mover_xlsx():
 def correr_macro():
     """ Ejecutar archivo xlsm con la macro  """
     ag.hotkey("winleft", "r")
-    ag.write(r"W:\Test_selenium\Registro Compras.xlsm")
+    caps1 = GetKeyState(VK_CAPITAL)
+    if caps1 == 0:
+        ag.write(r"W:\Test_selenium\Registro Compras.xlsm")
+    else:
+        ag.write(r"w:\tEST_SELENIUM\rEGISTRO cOMPRAS.XLSM")
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
