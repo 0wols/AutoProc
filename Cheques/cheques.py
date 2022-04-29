@@ -283,7 +283,11 @@ def ventanaEncontrada(nom_modulo, fecha):
     ag.press("enter")
     # time.sleep(2)
     ag.click(770, 904)
-    ag.write('Cheques_' + nom_modulo + '_' + fecha + '.xlsx')
+    caps3 = GetKeyState(VK_CAPITAL)
+    if caps3 == 0:
+    	ag.write('Cheques_' + nom_modulo + '_' + fecha + '.xlsx')
+    else:
+    	ag.write('cHEQUES_' + nom_modulo.lower() + '_' + fecha + '.XLSX')
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
