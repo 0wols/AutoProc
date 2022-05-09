@@ -108,12 +108,14 @@ def funcion1(coords, nom_modulo, cta_inicial, cta_final, fecha_inicial, fecha_fi
 
     # Usuario
     ag.click(user_box[0] - 160, user_box[1] - 4)  
+    caps1 = GetKeyState(VK_CAPITAL)
     if caps1 == 0:
         ag.write('CCORR')
     else:
         ag.write('ccorr')
     # Password
     ag.click(user_box[0] - 160, user_box[1] + 30)
+    caps2 = GetKeyState(VK_CAPITAL)
     if caps2 == 0:
         ag.write('CCORR')
     else:
