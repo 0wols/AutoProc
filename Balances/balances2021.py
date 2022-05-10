@@ -1,5 +1,12 @@
 #!"C:\Cmder\SII\Scripts\python.exe"
 
+"""
+
+Programa de descarga de Balances ECM
+
+
+"""
+
 import time, os, logging, glob
 import shutil
 import ctypes
@@ -13,6 +20,9 @@ from pywinauto.keyboard import send_keys
 from pywinauto import mouse
 from win32api import GetKeyState 
 from win32con import VK_CAPITAL 
+
+
+# VARIABLES GLOBALES
 
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 6)
 ag.PAUSE = 2
@@ -34,7 +44,7 @@ meses = {
 
 fecha = date.today().strftime("%d-%m-%Y")
 
-logging.basicConfig(filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Balances\Log_Balances_" + str(fecha) + '.txt',
+logging.basicConfig(filename=r"W:\Logs\Balances\Log_Balances_" + str(fecha) + '.txt',
                     level=logging.INFO,
                     format='%(asctime)s.%(msecs)03d: %(message)s',
                     datefmt='%H:%M:%S')
@@ -119,11 +129,33 @@ def timeis(func):
 
 @timeis
 def main():
+    # Función Principal
+
     logging.info('Programa iniciado. Presione Ctrl-C para abortar.')
+    a = dict()
+
     for i in x:
         logging.info('Comienza Loop Empresa: %s' % i[0])
-        mainLoop(i[1], "1", "9999999", i[0])
-    consolidar()
+        a[i[0]] = mainLoop(i[1], "1", "9999999", i[0])
+
+    logging.info('Diccionario final : {}'.format(a))
+
+    # Flag to check if all elements are same 
+    res = True 
+  
+    # extracting value to compare
+    test_val = list(a.values())[0]
+  
+    for ele in a:
+        if a[ele] != test_val:
+            res = False 
+            break
+
+    if res == True:
+        logging.info("Se descargaron todos los balances correctamente, se procede a consolidar.")
+        consolidar()
+    else:
+        logging.info("No se descargaron todos los balances. No se consolida")
 
 
 
@@ -197,11 +229,19 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     ag.click(62, 131)
     ag.click(452, 106)
     ag.click(1081, 593)
-    time.sleep(15)
-    ag.screenshot('Barra_Excel.png', region=(0, 997, 753, 20))
+    time.sleep(10)
     logging.info('Buscando ventana Excel')
-    # time.sleep(10)
-    # b = ag.screenshot('Barra_Excel2.png', region=(0, 1040, 630, 40))
+    checkFlex = ag.locateOnScreen(imPath("Flex_ocupado.png"))
+    if checkFlex == None:
+        flexNoTomado(nom_modulo)
+    else:
+        flexTomado()
+    return checkFlex
+
+
+
+
+def flexNoTomado(nom):
     while True:
         a = conectarVentana()
         if a is not None:
@@ -227,9 +267,9 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     ag.click(770, 904)
     caps3 = GetKeyState(VK_CAPITAL)
     if caps3 == 0:
-        ag.write('Balance_2021_' + nom_modulo + '_' + str(fecha) + '.xlsx')
+        ag.write('Balance_2021_' + nom + '_' + str(fecha) + '.xlsx')
     else:
-        ag.write('bALANCE_2021_' + nom_modulo.lower() + '_' + str(fecha) + '.xlsx')
+        ag.write('bALANCE_2021_' + nom.lower() + '_' + str(fecha) + '.xlsx') 
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
@@ -238,7 +278,15 @@ def mainLoop(coords, cta_inicial, cta_final, nom_modulo):
     ag.click(458, 140)
     ag.click(40, 39)
     ag.click(43, 125)
-    logging.info("Archivo descargado, empresa: {}".format(nom_modulo))
+    logging.info("Archivo descargado, empresa: {}".format(nom))
+
+
+def flexTomado():
+    ag.click(1137, 549)
+    ag.click(1904, 13)
+    ag.click(452, 139)
+    ag.click(41, 38)
+    ag.click(41, 125)
 
 
 def conectarVentana():
@@ -278,4 +326,10 @@ def consolidar():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        logging.info("Programa Finalizado por KeyboardInterrupt")
+    except FailSafeException as f:
+        logging.info("Programa Finalizado por FailSafe,", f)
+        pass
