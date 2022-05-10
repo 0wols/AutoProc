@@ -1,5 +1,12 @@
 #!"C:\Cmder\SII\Scripts\python.exe"
 
+"""
+
+Programa de descarga de Cheques ECM
+
+
+"""
+
 import pyautogui as ag
 import time, os, logging
 import ctypes
@@ -12,7 +19,11 @@ from pywinauto.application import Application
 from tenacity import retry, retry_if_result, retry_if_exception_type, stop_after_delay
 from win32api import GetKeyState 
 from win32con import VK_CAPITAL 
+from pyscreeze import Box
 
+
+
+# VARIABLES GLOBALES
 
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 6)
 ag.PAUSE = 2
@@ -21,7 +32,7 @@ hoy = date.today()
 hoy_formato_dia = date.today().strftime("%a")
 
 logging.basicConfig(
-    filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Cheques\Log_Cheques_" + date.today().strftime("%d-%m-%Y") + '.txt',
+    filename=r"W:\Logs\Cheques\Log_Cheques_" + date.today().strftime("%d-%m-%Y") + '.txt',
     level=logging.INFO,
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')
@@ -37,8 +48,6 @@ else:
     fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
 
 fecha = date.today().strftime("%d-%m-%Y")
-
-print(fecha)
 
 empresas = [
     ('ACHEGEO', '1102002', 'ACHEGEO.png'),
@@ -73,10 +82,20 @@ empresas = [
 
 
 def main():
+
+
     logging.info('Programa iniciado. Presione Ctrl-C para abortar.')
-    # preparacion()
+
+    miDicc = dict()
+
     for i in empresas:
-        buscarVentana(i[2], i[1], fechaFlex, fecha, i[0])
+        miDicc[i[0]] = buscarVentana(i[2], i[1], fechaFlex, fecha, i[0])
+
+    valorTest = Box(left=737, top=522, width=357, height=39) 
+
+    keyList = [ k for k in miDicc.keys() if miDicc[k] == valorTest ]
+
+    logging.info("Programa Finalizado. Empresas con Flex tomado : {}".format(keyList))
 
 
 def imPath(filename):
@@ -103,46 +122,6 @@ def get_processes_running():
     return p
 
 
-def preparacion():
-    logging.info('Comienza Preparación')
-    # ag.click(786, 94, clicks=2)
-    ag.hotkey("winleft", "r")
-    ag.write(r"C:\Documents and Settings\dental02\Escritorio\Contabilidad")
-    ag.press('enter')
-    # ag.click(20, 130, clicks=2)
-
-
-    while True:
-        empresa1 = ag.locateCenterOnScreen(imPath('Achegeo_Selec.png'))
-        if empresa1 is not None:
-            break
-    ag.click(empresa1, clicks=2)
-
-
-    while True:
-        user_box = ag.locateCenterOnScreen(imPath('Aceptar_Cancelar.png'))
-        if user_box is not None:
-            print(user_box)
-            break
-    ag.click(user_box[0], user_box[1] + 15)
-    # ag.click(454, 231)
-    # ag.click(1160, 96, clicks=2)
-    ag.hotkey("winleft", "r")
-    ag.write(r"V:\\")
-    ag.press('enter')
-    ag.write("Asecm.Finan6", interval=.25)
-    time.sleep(3)
-    ag.click(671, 609)
-    # ag.press('enter')
-    while True:
-        EQUIS = ag.locateOnScreen(imPath('Boton_Equis.png'))
-        if EQUIS is not None:
-            break
-
-    ag.click(EQUIS[0] + 45, EQUIS[1] + 9)
-
-
-# def mainLoop(cta_inicial, cta_final, nom_imagen, nom_modulo):
 def buscarVentana(coords, cta_final, fecha_flex, fecha, nom_modulo):
     """Loop principal donde se descarga el Balance de cada empresa """
 
@@ -190,21 +169,15 @@ def buscarVentana(coords, cta_final, fecha_flex, fecha, nom_modulo):
             break
 
     ag.click(flex_cuentas_ficha)
-
     time.sleep(3)
-
     ag.click(206, 127)
     ag.write('1', interval=.25)
-
     ag.click(385, 128)
     ag.write(cta_final, interval=.25)
-
     ag.click(205, 265)
     ag.write(fecha_flex, interval=.25)
-
     ag.click(384, 261)
     ag.write(fecha_flex, interval=.25)
-
     ag.click(49, 182)
     ag.click(63, 149)
 
@@ -214,60 +187,40 @@ def buscarVentana(coords, cta_final, fecha_flex, fecha, nom_modulo):
 
 
     time.sleep(90)
-    # a = ag.screenshot('Barra_Excel2.png', region=(0, 1040, 630, 40))
     b = ag.locateCenterOnScreen(imPath('Barra_Excel_Error.png'))
-    print(b)
 
     if b is not None:
         logging.info("Se encontro Barra de Error: {}".format(b))
         ag.click(1081, 604)
-        time.sleep(1)
-        proc = conectarVentana()
-        excel = Application().connect(process=int(proc))
-        excel[u"excflx.txt - Excel"].maximize()
-        sinDatosEnConsulta()
+        time.sleep(5)
+        checkFlex = ag.locateOnScreen(imPath("Flex_ocupado.png"))
+        if checkFlex == None:
+            proc = conectarVentana()
+            excel = Application().connect(process=int(proc))
+            excel[u"excflx.txt - Excel"].maximize()
+            sinDatosEnConsulta()
+        else:
+            ag.click(1137, 549)
+            ag.click(1904, 13)
+            ag.click(272, 401)
+            ag.click(41, 38)
+            ag.click(41, 125)
     else:
         time.sleep(15)
         logging.info("No se encontro Barra de Error: {}".format(b))
-        proc = conectarVentana()
-        excel = Application().connect(process=int(proc))
-        excel[u"excflx.txt - Excel"].maximize()  
-        # ag.moveTo(512, 1062, duration=2)
-        # ag.moveTo(525, 961, duration=2)
-        # ag.click(525, 961)
-        ventanaEncontrada(nom_modulo, fecha)
-
-
-
-@retry(retry=retry_if_exception_type(ImageNotFoundException), stop=(stop_after_delay(90)))
-def buscarError():
-    # time.sleep(15)
-    # ag.screenshot('Barra_Excel_Error.png', region=(0, 1043, 753, 36))
-    try:
-        a = ag.locateCenterOnScreen(imPath('Barra_Excel_Error.png'))
-        print(a)
-        logging.info("Imagen de Error encontrada, coords: {}".format(a))
-        return a
-    #     if a is not None:
-    #         logging.info("Se encontro Barra de Error")
-    #         ag.click(1081, 604)
-    #         time.sleep(1)
-    #         proc = conectarVentana()
-    #         excel = Application().connect(process=int(proc))
-    #         excel[u"excflx.txt - Excel"].maximize()
-    #         sinDatosEnConsulta()
-    except ImageNotFoundException:
-        logging.info("No se encontro la imagen")
-        raise
-    #     time.sleep(15)
-    #     logging.info("No se encontro Barra de Error")
-    #     proc = conectarVentana()
-    #     excel = Application().connect(process=int(proc))
-    #     excel[u"excflx.txt - Excel"].maximize()  
-    #     # ag.moveTo(512, 1062, duration=2)
-    #     # ag.moveTo(525, 961, duration=2)
-    #     # ag.click(525, 961)
-    #     ventanaEncontrada(nom_modulo, fecha)
+        checkFlex = ag.locateOnScreen(imPath("Flex_ocupado.png"))
+        if checkFlex == None:
+            proc = conectarVentana()
+            excel = Application().connect(process=int(proc))
+            excel[u"excflx.txt - Excel"].maximize()  
+            ventanaEncontrada(nom_modulo, fecha)
+        else:
+            ag.click(1137, 549)
+            ag.click(1904, 13)
+            ag.click(272, 401)
+            ag.click(41, 38)
+            ag.click(41, 125)
+    return checkFlex
 
 
 def ventanaEncontrada(nom_modulo, fecha):
@@ -281,24 +234,17 @@ def ventanaEncontrada(nom_modulo, fecha):
     ag.click(763, 42)
     ag.write(r"W:\Cuentas-ficha\Cheques")
     ag.press("enter")
-    # time.sleep(2)
     ag.click(770, 904)
     caps3 = GetKeyState(VK_CAPITAL)
     if caps3 == 0:
-    	ag.write('Cheques_' + nom_modulo + '_' + fecha + '.xlsx')
+        ag.write('Cheques_' + nom_modulo + '_' + fecha + '.xlsx')
     else:
-    	ag.write('cHEQUES_' + nom_modulo.lower() + '_' + fecha + '.XLSX')
+        ag.write('cHEQUES_' + nom_modulo.lower() + '_' + fecha + '.XLSX')
     ag.click(771, 925)
     ag.write("ll")
     ag.press("enter")
     ag.click(1748, 1008)
-    # time.sleep(2)
-    # time.sleep(2)
     ag.click(1904, 14)
-    # ag.press('enter')
-
-    # time.sleep(2)
-
     ag.click(274, 399)
     ag.click(40, 39)
     ag.click(43, 125)
@@ -314,18 +260,6 @@ def sinDatosEnConsulta():
     ag.click(270, 395)
     ag.click(37, 32)
     ag.click(36, 119)
-
-    # opciones = ag.locateCenterOnScreen(imPath('Opciones.png'))
-    # ag.click(opciones, duration=.25)
-
-    # salir1 = ag.locateCenterOnScreen(imPath('Salir1.png'))
-    # ag.click(salir1, duration=.25)
-
-    # archivo = ag.locateCenterOnScreen(imPath('Archivo.png'))
-    # ag.click(archivo, duration=.25)
-
-    # salir2 = ag.locateCenterOnScreen(imPath('Salir2.png'))
-    # ag.click(salir2, duration=.25)
     logging.info("No hay datos en la consulta seleccionada")
 
 
