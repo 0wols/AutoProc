@@ -34,7 +34,7 @@ meses = {
 
 fecha = date.today().strftime("%d-%m-%Y")
 
-logging.basicConfig(filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Balances\Log_Balances_" + str(fecha) + '.txt',
+logging.basicConfig(filename=r"W:\Logs\Balances\Log_Balances_" + str(fecha) + '.txt',
                     level=logging.INFO,
                     format='%(asctime)s.%(msecs)03d: %(message)s',
                     datefmt='%H:%M:%S')
