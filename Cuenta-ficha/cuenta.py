@@ -1,5 +1,12 @@
 #!"C:\Cmder\SII\Scripts\python.exe"
 
+"""
+
+Programa de descarga de Cuentas Ficha ECM
+
+
+"""
+
 import pyautogui as ag
 import time, os, logging
 import ctypes
@@ -10,6 +17,11 @@ from datetime import date
 from pywinauto.application import Application
 from win32api import GetKeyState 
 from win32con import VK_CAPITAL
+from pyscreeze import Box
+
+
+
+# VARIABLES GLOBALES
 
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 6)
 ag.PAUSE = 2
@@ -17,7 +29,7 @@ ag.PAUSE = 2
 fecha = date.today().strftime("%d-%m-%Y")
 
 logging.basicConfig(
-    filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Cuentas-ficha\Log_CuentaFicha_" + str(fecha) + '.txt',
+    filename=r"W:\Logs\Cuentas-ficha\Log_CuentaFicha_" + str(fecha) + '.txt',
     level=logging.INFO,
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')
@@ -64,8 +76,22 @@ nombres = [
 
 
 def main():
+    # Función Principal
+
+    logging.info("Programa iniciado. Presione Ctrl-C para abortar.")
+
+
+    miDicc = dict()
+
     for i in nombres:
-        funcion1(i[1], i[0], "1", "9999999", "1", "31122021")
+        miDicc[i[0]] = funcion1(i[1], i[0], "1", "9999999", "1", "31122021")
+
+    valorTest = Box(left=737, top=522, width=357, height=39)
+
+    keyList = [ k for k in miDicc.keys() if miDicc[k] == valorTest ]
+
+    logging.info("Programa Finalizado. Empresas con Flex tomado : {}".format(keyList))
+
 
 
 def imPath(filename):
@@ -127,43 +153,38 @@ def funcion1(coords, nom_modulo, cta_inicial, cta_final, fecha_inicial, fecha_fi
     ag.click(flex_cuentas)
     flex_cuentas_ficha = ag.locateCenterOnScreen(imPath('Flex_Cuenta-ficha.png'))
     ag.click(flex_cuentas_ficha)
-
     time.sleep(5)
-
     ag.click(206, 127)
     ag.write(cta_inicial, interval=.25)
-
     ag.click(385, 128)
     ag.write(cta_final, interval=.25)
-
     ag.click(205, 265)
     ag.write(fecha_inicial, interval=.25)
-
     ag.click(384, 261)
     ag.write(fecha_final, interval=.25)
-
     ag.click(49, 182)
     ag.click(63, 149)
-
-    # time.sleep(6)
-
     ag.click(195, 392)
-
     time.sleep(10)
 
-    # b = ag.screenshot('Barra_Excel_Cuenta.png', region=(2, 998, 914, 24))
     while True:
         a = ag.locateCenterOnScreen(imPath('Barra_Completado.png'))
         if a is not None:
-            proc = conectarVentana()
-            excel = Application().connect(process=int(proc))
-            excel[u"excflx.txt - Excel"].maximize()  
-            # ag.moveTo(512, 1062, duration=2)
-            # ag.moveTo(525, 961, duration=2)
-            # ag.click(525, 961)
-            ventanaEncontrada(nom_modulo, fecha)
-            break
-
+            checkFlex = ag.locateOnScreen(imPath("Flex_ocupado.png"))
+            if checkFlex == None:   
+                proc = conectarVentana()
+                excel = Application().connect(process=int(proc))
+                excel[u"excflx.txt - Excel"].maximize()  
+                ventanaEncontrada(nom_modulo, fecha)
+                break
+            else:
+                ag.click(1137, 549)
+                ag.click(1904, 13)
+                ag.click(272, 401)
+                ag.click(41, 38)
+                ag.click(41, 125)
+                break
+    return checkFlex
 
 def ventanaEncontrada(nom_modulo, fecha):
     # logging.info('Ventana encontrada, coordenadas: {}'.format(coords))
@@ -176,7 +197,6 @@ def ventanaEncontrada(nom_modulo, fecha):
     ag.click(763, 42)
     ag.write(r"W:\Cuentas-ficha\Cuentas-ficha")
     ag.press("enter")
-    # time.sleep(2)
     ag.click(770, 904)
     caps3 = GetKeyState(VK_CAPITAL)
     if caps3 == 0:
@@ -187,13 +207,8 @@ def ventanaEncontrada(nom_modulo, fecha):
     ag.write("ll")
     ag.press("enter")
     ag.click(1748, 1008)
-    # time.sleep(2)
     time.sleep(10)
     ag.click(1904, 14)
-    # ag.press('enter')
-
-    # time.sleep(2)
-
     ag.click(274, 399)
     ag.click(40, 39)
     ag.click(43, 125)
@@ -220,7 +235,10 @@ def conectarVentana():
 
 
 if __name__ == '__main__':
-    main()
-    # indice = nombres.index(('ESTACIONAR.png', 'ESTACIONAR'))
-    # print(indice)
-    # funcion1(nombres[16][0], nombres[16][1], "1", "9999999","01012021", "31122021")
+    try:
+        main()
+    except KeyboardInterrupt:
+        logging.info("Programa Finalizado por KeyboardInterrupt")
+    except FailSafeException as f:
+        logging.info("Programa Finalizado por FailSafe,", f)
+        pass
