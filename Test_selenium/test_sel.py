@@ -1,6 +1,10 @@
-#!"C:\Cmder\SII\Scripts\python.exe"
-# VERSION CON POP-UP
+"""
 
+Programa de descarga de Registro Compras SII
+
+VERSION CON POP-UP
+
+"""
 import logging
 import os
 import selenium
@@ -45,7 +49,7 @@ nombre_archivo = 'Registro Compras Resumen-' + str(dia) +'.xlsm'
 asunto = 'Registros Compras ' + str(dia)
 
 
-logging.basicConfig(filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Test_selenium\Log_SII_" + fecha_actual + '.txt',
+logging.basicConfig(filename=r"W:\Logs\Test_selenium\Log_SII_" + fecha_actual + '.txt',
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
@@ -55,19 +59,19 @@ logging.info('Programa iniciado, Selenium version: %s' % selenium.__version__)
 
 
 empresas = [
-    # ('ACHEGEO', '650210794', 'cordoba20'),
-    # ('APOCE', '651465125', 'huesca20'),
-    # ('VALPARAISO', '760094056', 'zaragoza20'),
-    # ('IQUIQUE', '760484032', 'bilbao20'),
-    # ('RECOLETA', '760888540', 'alicante20'),
-    # ('SANTIAGO', '761124684', 'toledo20'),
-    # ('CONCESIONES PROVIDENCIA', '761487582', 'sevilla20'),
-    # ('IMAGENOLOGIA', '761531697', 'caceres20'),
-    # ('LOS ANDES', '761541498', 'granada20'),
-    # ('COQUIMBO', '76161374k', 'almeria20'),
-    # ('ECM GEOTERMIA', '761684574', 'pamplona20'),
-    # ('CP LATINA CHILE', '761805495', 'salamanca2'),
-    # ('INFINERGEO', '761698176', 'murcia20'),
+    ('ACHEGEO', '650210794', 'cordoba20'),
+    ('APOCE', '651465125', 'huesca20'),
+    ('VALPARAISO', '760094056', 'zaragoza20'),
+    ('IQUIQUE', '760484032', 'bilbao20'),
+    ('RECOLETA', '760888540', 'alicante20'),
+    ('SANTIAGO', '761124684', 'toledo20'),
+    ('CONCESIONES PROVIDENCIA', '761487582', 'sevilla20'),
+    ('IMAGENOLOGIA', '761531697', 'caceres20'),
+    ('LOS ANDES', '761541498', 'granada20'),
+    ('COQUIMBO', '76161374k', 'almeria20'),
+    ('ECM GEOTERMIA', '761684574', 'pamplona20'),
+    ('CP LATINA CHILE', '761805495', 'salamanca2'),
+    ('INFINERGEO', '761698176', 'murcia20'),
     ('PIEDMONTT', '761872265', 'cordoba20'),
     ('CONCESIONES VALDIVIA', '762136775', 'malaga20'),
     ('INVERREST', '763098923', 'alcala20'),
@@ -130,17 +134,17 @@ def timing(f):
 
 @timing
 def main():
-    # if dia_formateado < 10:
-    #     loop1()
-    # else:
-    #     loop2()
+    if dia_formateado < 10:
+        loop1()
+    else:
+        loop2()
     driver.close()
-    # logging.info('Fin descargas, se cambian de formato los archivos.')
-    # generar_libro()
-    # logging.info('Fin conversion. Se mueven archivos xlsx')
-    # mover_xlsx()
-    # logging.info('Fin movimiento archivos. Se ejecuta Macro')
-    # correr_macro()
+    logging.info('Fin descargas, se cambian de formato los archivos.')
+    generar_libro()
+    logging.info('Fin conversion. Se mueven archivos xlsx')
+    mover_xlsx()
+    logging.info('Fin movimiento archivos. Se ejecuta Macro')
+    correr_macro()
     logging.info('Fin Macro. Se envia Correo')
     enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto)
     logging.info('Programa Finalizado')
