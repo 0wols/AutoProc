@@ -1,5 +1,10 @@
-#!"C:\Cmder\SII\Scripts\python.exe"
+"""
 
+Programa de descarga de Registro Compras SII
+
+VERSION MAIN ( NO POP-UP )
+
+"""
 import logging
 import os
 import selenium
