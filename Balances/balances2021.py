@@ -1,5 +1,3 @@
-#!"C:\Cmder\SII\Scripts\python.exe"
-
 """
 
 Programa de descarga de Balances ECM
