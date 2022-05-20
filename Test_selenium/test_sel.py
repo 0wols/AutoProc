@@ -395,7 +395,9 @@ def enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto):
     """ Enviar correo de archivo consolidado """
 
     hora = datetime.now().strftime('%H:%M:%S')
+    sleep(3)
     mouse.click(button='right', coords=(275, 1057))
+    sleep(3)
     mouse.click(button='left', coords=(250, 850))
     outlook = Application().connect(
         best_match=u"Sin título - Mensaje (HTML)",
