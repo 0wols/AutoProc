@@ -32,6 +32,19 @@ logging.basicConfig(
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')
 
+hoy = date.today()
+hoy_formato_dia = date.today().strftime("%a")
+
+if hoy_formato_dia == 'Mon':
+    fechaFlex = hoy - timedelta(days=3)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+elif hoy_formato_dia == 'Sun':
+    fechaFlex = hoy - timedelta(days=2)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+else:
+    fechaFlex = hoy - timedelta(days=1)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+
 nombres = [
     ('ACHEGEO', 'ACHEGEO.png'),
     ('ANDES', 'ANDES.png'),
