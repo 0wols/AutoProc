@@ -11,7 +11,7 @@ import ctypes
 import subprocess
 import re    
 import pandas as pd
-from datetime import date
+from datetime import date, timedelta
 from pywinauto.application import Application
 from win32api import GetKeyState 
 from win32con import VK_CAPITAL
@@ -31,6 +31,20 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s.%(msecs)03d: %(message)s',
     datefmt='%H:%M:%S')
+
+hoy = date.today()
+hoy_formato_dia = date.today().strftime("%a")
+
+if hoy_formato_dia == 'Mon':
+    fechaFlex = hoy - timedelta(days=3)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+elif hoy_formato_dia == 'Sun':
+    fechaFlex = hoy - timedelta(days=2)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+else:
+    fechaFlex = hoy - timedelta(days=1)
+    fechaFlex = fechaFlex.strftime("%d-%m-%Y").replace("-", "")
+
 
 nombres = [
     ('ACHEGEO', 'ACHEGEO.png'),
@@ -82,7 +96,7 @@ def main():
     miDicc = dict()
 
     for i in nombres:
-        miDicc[i[0]] = funcion1(i[1], i[0], "1", "9999999", "1", "31122021")
+        miDicc[i[0]] = funcion1(i[1], i[0], "1", "9999999", "1", fechaFlex)
 
     valorTest = Box(left=737, top=522, width=357, height=39)
 
