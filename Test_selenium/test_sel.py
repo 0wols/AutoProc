@@ -41,11 +41,13 @@ ag.PAUSE = 2
 fecha_actual = datetime.today().strftime('%Y-%m-%d')
 dia = datetime.now().strftime('%d-%m-%Y')
 dia_formateado = int(dia[:2])
+fecha_csv = datetime.today().strftime('%Y%m')
 
 direccion_para = "fernando.allendes@ecm.cl;jaime.arancibia@ecm.cl;cristian.coronel@ecm.cl"
 direccion_cc = "alberto.allendes@ecm.cl;maximiano.coronel@ecm.cl;pablo.coronel@valsegur.cl;tomas.yanez@ecm.cl"
-ruta = r'W:\Test_selenium\Historico'
-nombre_archivo = 'Registro Compras Resumen-' + str(dia) +'.xlsm'
+
+rutas = (r'W:\Test_selenium\Historico', r'W:\Test_selenium\Descarga\Registro_ventas')
+nombres_archivo = ('Registro Compras Resumen-' + str(dia) +'.xlsm', 'RCV_VENTA_89630400-3_' + str(fecha_csv) + '.csv') 
 asunto = 'Registros Compras ' + str(dia)
 
 
@@ -117,7 +119,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'Estimados:\n\nSe adjunta registro de compras para el holding actualizado al: ' + fecha_actual +'\n\n'
+texto = 'Estimados:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
 
 
 def timing(f):
@@ -341,7 +343,40 @@ def deslogear():
     pass
 
 
-custom_date_parser = lambda x: datetime.strptime(x, "%d-%m-%Y")
+def descargarVentasECM(nombre, mes, passwd):
+    element0 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//input[@id='rutcntr']")))
+    element0.send_keys(nombre)
+
+    element1 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//input[@id='clave']")))
+    element1.send_keys(passwd)
+
+    element2 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//button[@id='bt_ingresar']")))
+    element2.click()
+    sleep(3)
+
+    while True:
+        try:
+            element3 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//select[@id='periodoMes']")))
+            select = Select(element3)
+            select.select_by_visible_text(mes)
+        except TimeoutException as t:
+            logging.info('Error por excepción de Timeout', t)
+            continue
+        break
+    sleep(3)
+
+    element4 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//button[contains(text(),'Consultar')]")))
+    element4.click()
+    sleep(3)
+
+    element5 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//strong[contains(text(),'VENTA')]")))
+    element5.click()
+
+    sleep(3)
+    element6 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//button[contains(text(),'Descargar Detalles')]")))
+    action.move_to_element(element6).perform()
+    action.click(element6).perform()
+    sleep(5)
 
 
 def generar_libro():
@@ -358,6 +393,7 @@ def mover_xlsx():
     source = 'W:\\Test_selenium\\Descarga\\'
     dest1 = 'W:\\Test_selenium\\Descarga\\Registro_compra\\'
     dest2 = 'W:\\Test_selenium\\Descarga\\Registro_pendientes\\'
+    dest3 = 'W:\\Test_selenium\\Descarga\\Registro_ventas\\'
 
     chdir(source)
 
@@ -368,6 +404,9 @@ def mover_xlsx():
             shutil.move(f, dest1)
         elif f.startswith("RCV_COMPRA_PENDIENTE"):
             shutil.move(f, dest2)
+    for b in glob("*.csv"):
+        if b.startswith("RCV_VENTA"):
+            shutil.move(b, dest3)
 
 
 def correr_macro():
@@ -394,7 +433,7 @@ def correr_macro():
             break
 
 
-def enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto):
+def enviar_correo(direccion_para, direccion_cc, rutas, nombres_archivo, asunto):
     """ Enviar correo de archivo consolidado """
 
     hora = datetime.now().strftime('%H:%M:%S')
@@ -418,12 +457,23 @@ def enviar_correo(direccion_para, direccion_cc, ruta, nombre_archivo, asunto):
     send_keys('ud')
     sleep(3)
     outlook[u"Insertar archivo"].child_window(control_id=1001).click_input()
-    send_keys(ruta)
+    send_keys(rutas[0])
     send_keys('{ENTER}')
     outlook[u"Insertar archivo"].child_window(
         control_id=1148,
         found_index=0).click_input()
-    send_keys(nombre_archivo, with_spaces=True)
+    send_keys(nombres_archivo[0], with_spaces=True)
+    send_keys('{ENTER}')
+    sleep(3)
+    send_keys('%N')
+    send_keys('ud')
+    outlook[u"Insertar archivo"].child_window(control_id=1001).click_input()
+    send_keys(rutas[1])
+    send_keys('{ENTER}')
+    outlook[u"Insertar archivo"].child_window(
+        control_id=1148,
+        found_index=0).click_input()
+    send_keys(nombres_archivo[1], with_spaces=True)
     send_keys('{ENTER}')
     outlook[u"Sin título - Mensaje (HTML)"].child_window(
         control_id=4101).click_input()
