@@ -119,7 +119,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'TEST \n\n Estimados:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
+texto = 'Estimados:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
 
 
 def timing(f):
