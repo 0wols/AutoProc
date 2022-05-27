@@ -44,7 +44,7 @@ dia_formateado = int(dia[:2])
 fecha_csv = datetime.today().strftime('%Y%m')
 
 direccion_para = "fernando.allendes@ecm.cl;jaime.arancibia@ecm.cl;cristian.coronel@ecm.cl"
-direccion_cc = "alberto.allendes@ecm.cl;maximiano.coronel@ecm.cl;pablo.coronel@valsegur.cl;tomas.yanez@ecm.cl"
+direccion_cc = "alberto.allendes@ecm.cl;maximiano.coronel@ecm.cl;pablo.coronel@valsegur.cl;lorena.paredes@ecm.cl;tomas.yanez@ecm.cl"
 
 rutas = (r'W:\Test_selenium\Historico', r'W:\Test_selenium\Descarga\Registro_ventas')
 nombres_archivo = ('Registro Compras Resumen-' + str(dia) +'.xlsm', 'RCV_VENTA_89630400-3_' + str(fecha_csv) + '.csv') 
@@ -119,7 +119,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'Estimados:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
+texto = 'Estimad@s:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
 
 
 def timing(f):
