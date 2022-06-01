@@ -2,7 +2,7 @@
 
 ## Descripción
 
-AutoProc consiste en 4 scripts de automatización:
+* AutoProc consiste en 4 scripts de automatización:
 	* Descarga y consolidación de Balances.
 	* Descarga de cheques del día anterior.
 	* Descarga y consolidación de Cuentas-Ficha
