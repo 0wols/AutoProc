@@ -53,7 +53,7 @@ nombres_archivo = ('Registro Compras Resumen-' + str(dia) +'.xlsm', 'Registro Ve
 asunto = 'Registros Compras y Ventas ' + str(dia)
 
 
-logging.basicConfig(filename=r"C:\Users\Usuario ECM\Desktop\Python\Logs\Test_selenium\Log_SII_" + fecha_actual + '.txt',
+logging.basicConfig(filename=r"W:\Logs\Test_selenium\Log_SII_" + fecha_actual + '.txt',
                             filemode='a',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
@@ -121,7 +121,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'Estimad@s:\n\nSe adjunta registro de compras para el holding y registro de ventas ECM actualizado al: ' + fecha_actual +'\n\n'
+texto = 'Estimad@s:\n\nSe adjunta registro de compras y registro de ventas para el holding actualizado al: ' + fecha_actual +'\n\n'
 
 
 def timing(f):
