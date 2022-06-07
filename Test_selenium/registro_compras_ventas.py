@@ -352,10 +352,14 @@ def logear(nombre, mes, passwd):
 def deslogear():
     element9 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//body/div[@id='my-wrapper']/div[1]/div[1]/nav[1]/div[1]/div[1]/span[1]/a[1]")))
     element9.click()
-    element10 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//body/div[@id='my-wrapper']/div[3]/div[1]/div[1]/div[2]/div[1]/ul[1]/li[6]/a[1]")))
+    sleep(3)
+    element10 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//body/div[@id='my-wrapper']/div[4]/div[1]/div[1]/div[2]/div[1]/ul[1]/li[7]/a[1]")))
     element10.click()
     element11 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//a[contains(text(),'Ingresar al Registro de Compras y Ventas')]")))
     element11.click()
+
+    # element11 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//a[contains(text(),'Ingresar al Registro de Compras y Ventas')]")))
+    # element11.click()
     sleep(3)
     pass
 
