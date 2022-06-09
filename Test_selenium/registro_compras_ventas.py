@@ -112,7 +112,7 @@ def main():
     correr_macro_compras()
     correr_macro_ventas()
     logging.info('Fin Macro. Se envia Correo')
-    enviar_correo(direccion_para, direccion_cc, rutas, nombres_archivo, asunto)
+    enviar_correo(direccion_para, direccion_cc, nombres_archivo, asunto)
     logging.info('Programa Finalizado')
 
 
@@ -404,7 +404,7 @@ def correr_macro_ventas():
             break
 
 
-def enviar_correo(direccion_para, direccion_cc, rutas, nombres_archivo, asunto):
+def enviar_correo(direccion_para, direccion_cc, nombres_archivo, asunto):
     """ Enviar correo de archivo consolidado """
 
     hora = datetime.now().strftime('%H:%M:%S')
