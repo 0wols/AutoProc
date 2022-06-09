@@ -25,6 +25,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchElementException
+from secrets import empresas
 from pywinauto.application import Application
 from pywinauto.keyboard import send_keys
 from pywinauto import mouse
@@ -60,47 +61,6 @@ logging.basicConfig(filename=r"W:\Logs\Test_selenium\Log_SII_" + fecha_actual + 
                             level=logging.INFO)
 
 logging.info('Programa iniciado, Selenium version: %s' % selenium.__version__)
-
-
-empresas = [
-    ('ACHEGEO', '650210794', 'cordoba20'),
-    ('APOCE', '651465125', 'huesca20'),
-    ('VALPARAISO', '760094056', 'zaragoza20'),
-    ('IQUIQUE', '760484032', 'bilbao20'),
-    ('RECOLETA', '760888540', 'alicante20'),
-    ('SANTIAGO', '761124684', 'toledo20'),
-    ('CONCESIONES PROVIDENCIA', '761487582', 'sevilla20'),
-    ('IMAGENOLOGIA', '761531697', 'caceres20'),
-    ('LOS ANDES', '761541498', 'granada20'),
-    ('COQUIMBO', '76161374k', 'almeria20'),
-    ('ECM GEOTERMIA', '761684574', 'pamplona20'),
-    ('CP LATINA CHILE', '761805495', 'salamanca2'),
-    ('INFINERGEO', '761698176', 'murcia20'),
-    ('PIEDMONTT', '761872265', 'cordoba20'),
-    ('CONCESIONES VALDIVIA', '762136775', 'malaga20'),
-    ('INVERREST', '763098923', 'alcala20'),
-    ('CAJA EXPRESS', '763381463', 'albacete20'),
-    ('VALSEGUR', '765033810', 'tarragona2'),
-    ('RENAL', '765184304', 'daroca20'),
-    ('POLLO ABRASADO', '767860056', 'coruna20'),
-    ('CAFE DEL NORTE', '767860099', 'escalona20'),
-    ('TALCA', '768298602', 'cuenca20'),
-    ('CLEVERPARK', '769756159', 'aranjuez20'),
-    ('PUNTA ARENAS', '772903170', 'almeria10'),
-    ('DIAGNOSIS', '785037707', 'mallorca20'),
-    ('MEDCONSUL', '785750306', 'altamira20'),
-    ('INGENIEROS', '79558840k', 'burgos20'),
-    ('SERVILAND', '798929402', 'merida20'),
-    ('DENSITOSEA', '799540401', 'escorial20'),
-    ('ECM', '896304003', 'madrid20'),
-    ('INVERTERRA', '967010006', 'segovia20'),
-    ('TOMOIMAGEN', '967529400', 'girona20'),
-    ('SEC', '967786500', 'valencia20'),
-    ('ESTACIONAR', '968709100', 'barcelona2'),
-    ('AUTOPARQUEO', '968709208', 'huelva20'),
-    ('AUTOORDEN', '968709305', 'getafe20')
-]
-
 currentMonth = datetime.now().month
 
 meses = {
