@@ -5,6 +5,7 @@ Programa de descarga de Registro Ventas SII
 VERSION CON POP-UP
 
 """
+
 import logging
 import os
 import selenium
@@ -25,7 +26,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchElementException
-from secrets import empresas
+from secrets import empresas, direccion_para, direccion_cc
 from pywinauto.application import Application
 from pywinauto.keyboard import send_keys
 from pywinauto import mouse
@@ -44,10 +45,10 @@ dia = datetime.now().strftime('%d-%m-%Y')
 dia_formateado = int(dia[:2])
 fecha_csv = datetime.today().strftime('%Y%m')
 
-direccion_para = "fernando.allendes@ecm.cl;jaime.arancibia@ecm.cl;cristian.coronel@ecm.cl"
-direccion_cc = "alberto.allendes@ecm.cl;maximiano.coronel@ecm.cl;pablo.coronel@valsegur.cl;lorena.paredes@ecm.cl;tomas.yanez@ecm.cl"
 
-rutas = r'W:\Test_selenium\Historico'
+
+root = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Test_selenium"
+rutas = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Test_selenium\\Historico1\\"
 
 
 nombres_archivo = ('Registro Compras Resumen-' + str(dia) +'.xlsm', 'Registro Ventas Resumen-' + str(dia) + '.xlsm') 
@@ -152,7 +153,7 @@ def imPath(filename):
 options = Options()
 # options.headless = True
 prefs = {
-    "download.default_directory" : r"W:\Test_selenium\Descarga",
+    "download.default_directory" : root + "\\Descarga",
     "download.prompt_for_download": False,
     "download.directory_upgrade": True,
     "safebrowsing_for_trusted_sources_enabled": False,
@@ -313,11 +314,11 @@ def logear(nombre, mes, passwd):
 def deslogear():
     element9 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//body/div[@id='my-wrapper']/div[1]/div[1]/nav[1]/div[1]/div[1]/span[1]/a[1]")))
     element9.click()
-    sleep(3)
-    element10 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//button[contains(text(),'Cerrar')]")))
-    element10.click()
-    element11 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//body/div[@id='my-wrapper']/div[3]/div[1]/div[1]/div[2]/div[1]/ul[1]/li[6]/a[1]")))
-    element11.click()
+    while True:
+        link = ag.locateCenterOnScreen(imPath("link_registro.png"))
+        if link is not None:
+            break
+    ag.click(link, clicks=2)
     element12 = wait.until(EC.element_to_be_clickable((By.XPATH, r"//a[contains(text(),'Ingresar al Registro de Compras y Ventas')]")))
     element12.click()
     sleep(3)
@@ -328,7 +329,7 @@ custom_date_parser = lambda x: datetime.strptime(x, "%d-%m-%Y")
 
 def generar_libro():
     """ Generar archivos xlsx a partir de los archivos csv descargados """
-    for csv_file in glob(r"W:\Test_selenium\Descarga\*.csv"):
+    for csv_file in glob(root + "\\Descarga\\*.csv"):
         print(csv_file)
         df = pd.read_csv(csv_file, sep=";", parse_dates=['Fecha Docto','Fecha Recepcion'], infer_datetime_format=True, dayfirst=True, index_col=False)
         xlsx_file = os.path.splitext(csv_file)[0] + '.xlsx'
@@ -337,10 +338,10 @@ def generar_libro():
 
 def mover_xlsx():
     """ Mover de carpetas los archivos xlsx"""
-    source = 'W:\\Test_selenium\\Descarga\\'
-    dest1 = 'W:\\Test_selenium\\Descarga\\Registro_compra\\'
-    dest2 = 'W:\\Test_selenium\\Descarga\\Registro_pendientes\\'
-    dest3 = 'W:\\Test_selenium\\Descarga\\Registro_ventas\\'
+    source = root + "\\Descarga\\"
+    dest1 = root + "\\Descarga\\Registro_compra\\"
+    dest2 = root + "\\Descarga\\Registro_pendientes\\"
+    dest3 = root + "\\Descarga\\Registro_ventas\\"
 
     chdir(source)
 
@@ -360,9 +361,9 @@ def correr_macro_compras():
     ag.hotkey("winleft", "r")
     caps1 = GetKeyState(VK_CAPITAL)
     if caps1 == 0:
-        ag.write(r"W:\Test_selenium\Registro Compras.xlsm")
+        ag.write(root +  "\\Registro Compras.xlsm")
     else:
-        ag.write(r"w:\tEST_SELENIUM\rEGISTRO cOMPRAS.XLSM")
+        ag.write("c:\\uSERS\\uSUARIO ecm\\dESKTOP\\pYTHON\\aUTOpROC\\tEST_SELENIUM\\rEGISTRO cOMPRAS.XLSM")
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
@@ -384,9 +385,9 @@ def correr_macro_ventas():
     ag.hotkey("winleft", "r")
     caps1 = GetKeyState(VK_CAPITAL)
     if caps1 == 0:
-        ag.write(r"W:\Test_selenium\Registro Ventas.xlsm")
+        ag.write(root +  "\\Registro Ventas.xlsm")
     else:
-        ag.write(r"w:\tEST_SELENIUM\rEGISTRO vENTAS.XLSM")
+        ag.write("c:\\uSERS\\uSUARIO ecm\\dESKTOP\\pYTHON\\aUTOpROC\\tEST_SELENIUM\\rEGISTRO vENTAS.XLSM")
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
@@ -427,8 +428,11 @@ def enviar_correo(direccion_para, direccion_cc, rutas, nombres_archivo, asunto):
     send_keys('ud')
     sleep(3)
     outlook[u"Insertar archivo"].child_window(control_id=1001).click_input()
-    send_keys(rutas)
-    send_keys('{ENTER}')
+    while True:
+        file1 = ag.locateCenterOnScreen(imPath("historico.png"))
+        if file1 is not None:
+            break
+    ag.click(file1, clicks=2)
     outlook[u"Insertar archivo"].child_window(
         control_id=1148,
         found_index=0).click_input()
@@ -438,8 +442,11 @@ def enviar_correo(direccion_para, direccion_cc, rutas, nombres_archivo, asunto):
     send_keys('%N')
     send_keys('ud')
     outlook[u"Insertar archivo"].child_window(control_id=1001).click_input()
-    send_keys(rutas)
-    send_keys('{ENTER}')
+    while True:
+        file2 = ag.locateCenterOnScreen(imPath("historico.png"))
+        if file2 is not None:
+            break
+    ag.click(file2, clicks=2)
     outlook[u"Insertar archivo"].child_window(
         control_id=1148,
         found_index=0).click_input()
