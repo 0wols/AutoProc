@@ -260,7 +260,7 @@ def flexNoTomado(nom):
     ag.press("v")
     ag.press("1")
     ag.click(763, 42)
-    ag.write(r"W:\Balances")
+    ag.write(r"C:\Users\Usuario ECM\Desktop\Python\AutoProc\Balances0")
     ag.press("enter")
     ag.click(770, 904)
     caps3 = GetKeyState(VK_CAPITAL)
@@ -298,11 +298,11 @@ def consolidar():
     ag.press("winleft")
     ag.write("ejecutar")
     ag.press("enter")
-    ag.write(r"W:\Balances\CONSOLIDADO")
+    ag.write(r"C:\Users\Usuario ECM\Desktop\Python\AutoProc\Balances0\CONSOLIDADO")
     ag.press('enter')
     ag.hotkey("winleft", "up")
     ag.click(742, 37)
-    ag.write(r"W:\Balances\CONSOLIDADO\CONSOLIDADO_2021.xlsm")
+    ag.write(r"C:\Users\Usuario ECM\Desktop\Python\AutoProc\Balances0\CONSOLIDADO\CONSOLIDADO_2021.xlsm")
     ag.press("enter")
     while True:
         botonSi = ag.locateCenterOnScreen(imPath('Boton_si.png'))
@@ -315,8 +315,8 @@ def consolidar():
     ag.dragTo(431, 127, 1, button='left')
     ag.click(989, 548)
     ag.click(1893, 10)
-    source = 'W:\\Balances'
-    dest = 'W:\\Balances\\CONSOLIDADO\\Balances_historicos' 
+    source = 'C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Balances0'
+    dest = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Balances0\\CONSOLIDADO\\Balances_historicos"
     os.chdir(source)
     for f in glob.glob("*.xlsx"):
         shutil.move(f, dest)
