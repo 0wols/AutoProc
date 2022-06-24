@@ -1,6 +1,6 @@
 """
 
-Programa de descarga de Registro Ventas SII
+Programa de descarga de Registro Compras y Ventas SII
 
 VERSION CON POP-UP
 
@@ -367,8 +367,6 @@ def correr_macro_compras():
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
-    ag.click(862, 75)
-    ag.click(469, 154)
     ag.hotkey("ctrl", "u")
 
     sleep(8)
@@ -382,6 +380,7 @@ def correr_macro_compras():
 
 def correr_macro_ventas():
     """ Ejecutar archivo xlsm con la macro del Registro Ventas  """
+    sleep(5)
     ag.hotkey("winleft", "r")
     caps1 = GetKeyState(VK_CAPITAL)
     if caps1 == 0:
