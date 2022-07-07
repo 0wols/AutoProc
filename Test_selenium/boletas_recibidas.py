@@ -42,9 +42,6 @@ ag.PAUSE = 2
 
 fecha_actual = datetime.today().strftime('%Y-%m-%d')
 
-
-
-
 root = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Test_selenium"
 
 logging.basicConfig(filename=r"W:\Logs\Test_selenium\Log_Boletas_" + fecha_actual + '.txt',
@@ -59,7 +56,7 @@ mesesMayus = { 0 : "ENERO",
                1 : "FEBRERO",
                2 : "MARZO",
                3 : "ABRIL",
-               4: "MAYO",
+               4 : "MAYO",
                5 : "JUNIO",
                6 : "JULIO",
                7 : "AGOSTO",
@@ -114,7 +111,7 @@ prefs = {
 }
 options.add_experimental_option("prefs", prefs)
 
-options.add_argument("--window-size=1920,1200")
+options.add_argument("--window-size=960,1200")
 
 dir = 'https://zeusr.sii.cl/AUT2000/InicioAutenticacion/IngresoRutClave.html?https://loa.sii.cl/cgi_IMT/TMBCOC_MenuConsultasContribRec.cgi?dummy=1461943244650'
 
@@ -127,7 +124,7 @@ action = ActionChains(driver)
 driver.implicitly_wait(20)
 
 driver.get(dir)
-driver.maximize_window()
+# driver.maximize_window()
 
 wait = WebDriverWait(driver, 20)
 
@@ -143,23 +140,27 @@ def descargar_boletas_recibidas(nombre, crut, passwd):
 
     mesDatos0 = []
 
-    try:
-        for mes, valor in mesesMayus.items():
-
+    for mes, valor in mesesMayus.items():
+        try:
             linkMes = driver.find_element(By.XPATH, r"//a[contains(text(),'{}')]".format(valor))
             mesDatos0.append(linkMes)
+        except NoSuchElementException:
 
-    except NoSuchElementException:
+            logging.info("No hay información de Boletas recibidas para la empresa:{} en el mes:{}".format(nombre, valor))
+            # mesDatos0.append(None)
+            pass
 
-        logging.info("No hay información de Boletas recibidas para la empresa:{} en el mes:{}".format(nombre, valor))
-        mesDatos0.append(None)
-
+    print(mesDatos0)
 
     mesDatos1 = dict(zip(mesesMayus.values(), mesDatos0))
 
-    mesDatos1 = { k: v for (k, v) in mesDatos1.items() if v != None }
+    # mesDatos1 = { k : v for (k, v) in mesDatos1.items() if v != None }
+
+    print(mesDatos1)
 
     for mes, valor in mesDatos1.items():
+
+        sleep(5)
 
         valor.click()
 
@@ -168,7 +169,7 @@ def descargar_boletas_recibidas(nombre, crut, passwd):
         tab = driver.find_element(By.XPATH,r"//body/div[2]/center[1]/center[1]/form[1]/table[1]")
         tab_html = tab.get_attribute('outerHTML')
         df = pd.read_html(tab_html, skiprows=1, thousands='.', encoding="utf-8")[0]
-        df.to_excel("Boletas_recibidas_{}_{}.xlsx".format(nombre, mes), header=False, index=False, float_format = '%.2f')
+        df.to_excel(r"C:\Users\Usuario ECM\Desktop\Python\AutoProc\Test_selenium\Descarga\Boletas_Recibidas\Boletas_Recibidas_{}_{}.xlsx".format(nombre, mes), header=False, index=False, float_format = '%.2f')
 
         sleep(2)
 
