@@ -5,7 +5,8 @@ Programa de descarga de Registro Compras y Ventas SII
 VERSION CON POP-UP
 
 """
-
+import pdb
+pdb.set_trace()
 import logging
 import os
 import selenium
@@ -48,7 +49,6 @@ fecha_csv = datetime.today().strftime('%Y%m')
 
 
 root = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Test_selenium"
-rutas = "C:\\Users\\Usuario ECM\\Desktop\\Python\\AutoProc\\Test_selenium\\Historico1\\"
 
 
 nombres_archivo = ('Registro Compras Resumen-' + str(dia) +'.xlsm', 'Registro Ventas Resumen-' + str(dia) + '.xlsm') 
@@ -82,7 +82,7 @@ meses = {
 mes_actual = meses[currentMonth]
 mes_anterior = meses[currentMonth - 1]
 
-texto = 'Estimad@s:\n\nSe adjunta registro de compras y registro de ventas para el holding actualizado al: ' + fecha_actual +'\n\n'
+texto = 'Estimad@s:\n\nSe adjunta registro de compras y registro de ventas para el holding actualizado al: ' + fecha_actual +'\n\nNota: Estimado Orb, arreglé algunos detalles de este programa. Solo queda el error 500 por solucionar. Salu3'
 
 
 def timing(f):
@@ -109,8 +109,8 @@ def main():
     logging.info('Fin conversion. Se mueven archivos xlsx')
     mover_xlsx()
     logging.info('Fin movimiento archivos. Se ejecuta Macro')
-    correr_macro_compras()
-    correr_macro_ventas()
+    correr_macro_compras() 
+    correr_macro_ventas() # se queda detenido en esta Mikasa poner Nino
     logging.info('Fin Macro. Se envia Correo')
     enviar_correo(direccion_para, direccion_cc, nombres_archivo, asunto)
     logging.info('Programa Finalizado')
@@ -126,7 +126,6 @@ def loop1():
         descargar_ventas(i[1], mes_anterior, i[2])
         logging.info('Comienza a descargar Registro Ventas Empresa: {} , Mes: {}'.format(i[0], mes_actual))
         descargar_ventas(i[1], mes_actual, i[2])
-
 
 
 
@@ -369,12 +368,30 @@ def correr_macro_compras():
     ag.hotkey("winleft", "up")
     ag.hotkey("ctrl", "u")
 
+
+    while True:
+        d = ag.locateCenterOnScreen(imPath('ya_existe_historico.png'))
+        if d is not None:
+            ag.click(858, 602)
+            break
+
+
+
+    while True:
+        d = ag.locateCenterOnScreen(imPath('ya_existe_historico.png'))
+        if d is not None:
+            ag.click(858, 602)
+            break
+
     sleep(8)
+
+
+    # breakpoint()
 
     while True:
         c = ag.locateCenterOnScreen(imPath('Mikasa.png'))
         if c is not None:
-            ag.press("enter")
+            ag.click(917, 808)
             break
 
 
@@ -390,16 +407,20 @@ def correr_macro_ventas():
     ag.press("enter")
     sleep(5)
     ag.hotkey("winleft", "up")
-    ag.click(862, 75)
-    ag.click(469, 154)
     ag.hotkey("ctrl", "h")
 
     sleep(8)
 
     while True:
+        d = ag.locateCenterOnScreen(imPath('ya_existe_historico.png'))
+        if d is not None:
+            ag.click(858, 602)
+            break
+
+    while True:
         c = ag.locateCenterOnScreen(imPath('Mikasa.png'))
         if c is not None:
-            ag.press("enter")
+            ag.click(917, 808)
             break
 
 
